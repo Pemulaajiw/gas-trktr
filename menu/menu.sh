@@ -275,7 +275,9 @@ else
     yesterday_tx=NULL
     yesterday_txv=NULL
 fi
-
+    local profile=$(vnstat | sed -n '3p' | awk '{print $1}')
+    local today=$(vnstat -i $profile | awk '/today/{print $8" "$9}')
+    local month=$(vnstat -i $profile | awk -v m=$(date +%b) '$0 ~ m {print $9" "$10}')
 # // SSH Websocket Proxy
 ssh_ws=$( systemctl status ws-stunnel | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
 if [[ $ssh_ws == "running" ]]; then
@@ -337,7 +339,7 @@ clear
 clear && clear && clear
 clear;clear;clear
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-echo -e "$COLOR1│${NC} ${COLBG1}      WELCOME TO AUTOSCRIPT TRAKTER BY FMRKEVPN           ${NC} $COLOR1│ $NC"
+echo -e "$COLOR1│${NC} ${COLBG1}   WELCOME TO AUTOSCRIPT TRAKTER BY FMRKEVPN   ${NC} $COLOR1│ $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
 echo -e "$COLOR1│$NC${WH}❈ SYSTEM          : ${WH}$(cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/PRETTY_NAME//g')${NC}"
@@ -348,15 +350,12 @@ echo -e "$COLOR1│$NC${WH}❈ IP VPS          : ${WH}$(curl -s ipv4.icanhazip.c
 echo -e "$COLOR1│$NC${WH}❈ ISP             : ${WH}$ISP${NC}"
 echo -e "$COLOR1│$NC${WH}❈ CITY            : ${WH}$CITY${NC}"
 echo -e "$COLOR1│$NC${WH}❈ DOMAIN          : ${WH}$(cat /etc/xray/domain)${NC}"
-    local profile=$(vnstat | sed -n '3p' | awk '{print $1}')
-    local today=$(vnstat -i $profile | awk '/today/{print $8" "$9}')
-    local month=$(vnstat -i $profile | awk -v m=$(date +%b) '$0 ~ m {print $9" "$10}')
     
 echo -e "$COLOR1│ ${NC}[📊] Traffic Hari Ini: ${COLOR1}$today${NC}"
 echo -e "$COLOR1│ ${NC}[📈] Traffic Bulan Ini: ${COLOR1}$month${NC}"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-echo -e "$COLOR1|${WH} V2RAY :\e[0m $status_xray  \e[0m|${WH} NGINX :\e[0m $status_nginx  \e[0m|${WH} SSHWS :\e[0m $status_ws \e[0m|${WH}  $status_beruangjatuh  ${COLOR1}| $NC"
+echo -e "$COLOR1|${WH} V2RAY :\e[0m $status_xray  \e[0m|${WH} NGINX :\e[0m $status_nginx  \e[0m|${WH} SSHWS :\e[0m $status_ws \e[0m|${WH}  $status_beruangjatuh    ${COLOR1}| $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 echo -e "$COLOR1     ┌───────────────────────────────────────┐${NC}"
 echo -e "            $COLOR1$NC${WH}    LIST ACCOUNT PREMIUM ${NC}"
